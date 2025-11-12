@@ -1,0 +1,165 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "zaml", 
+   "i18n": {
+            "bundleUrl": "i18n/i18n.properties",
+            "supportedLocales": [
+                ""
+            ],
+            "fallbackLocale": ""
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "type": "application",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "sourceTemplate": {
+            "id": "@sap/ux-app-migrator:freestyle",
+            "version": "1.15.5",
+            "toolsId": "9a798b41-a8e9-42af-b219-c1bc0bc2715a"
+        },
+        "dataSources": {
+            "company": {
+                "uri": "model/company.json",
+                "type": "JSON"
+            },
+            "relation": {
+                "uri": "model/relation.json",
+                "type": "JSON"
+            }
+        }
+  },
+   "sap.ui": {
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "dependencies": {
+            "minUI5Version": "1.108.0",
+            "libs": {
+                "sap.ui.core": {},
+                "sap.m": {}
+            }
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "zaml.i18n.i18n",
+                    "supportedLocales": [
+                        ""
+                    ],
+                    "fallbackLocale": ""
+                }
+            },
+            "company": {
+                "type": "sap.ui.model.json.JSONModel",
+                "dataSource": "company",
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "supportedLocales": [
+                        ""
+                    ],
+                    "fallbackLocale": ""
+                }
+            },
+            "relation": {
+                "type": "sap.ui.model.json.JSONModel",
+                "dataSource": "relation",
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "supportedLocales": [
+                        ""
+                    ],
+                    "fallbackLocale": ""
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "zaml.view.App",
+            "type": "XML",
+            "id": "app"
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ],
+            "img": [
+                {
+                    "uri": "img/CHG1.png"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "type": "View",
+                "viewType": "XML",
+                "path": "zaml.view",
+                "controlId": "app",
+                "controlAggregation": "pages"
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "Overview",
+                    "target": "Overview"
+                },
+                {
+                    "pattern": "detail/{objectId}",
+                    "name": "detail",
+                    "target": "detail"
+                },
+                {
+                    "pattern": "invoiceList/{objectId}",
+                    "name": "invoiceList",
+                    "target": "invoiceList"
+                },
+                {
+                    "pattern": "amlrisk/{objectId}",
+                    "name": "amlrisk",
+                    "target": "amlrisk"
+                },
+                {
+                    "pattern": "customize",
+                    "name": "customize",
+                    "target": "customize"
+                }
+            ],
+            "targets": {
+                "Overview": {
+                    "id": "Overview",
+                    "name": "Overview"
+                },
+                "detail": {
+                    "id": "detail",
+                    "name": "Detail"
+                },
+                "invoiceList": {
+                    "id": "invoiceList",
+                    "name": "InvoiceList"
+                },
+                "amlrisk": {
+                    "id": "amlrisk",
+                    "name": "amlrisk"
+                },
+                "customize": {
+                    "id": "customize",
+                    "name": "customize"
+                }
+            }
+        }
+    }
+}

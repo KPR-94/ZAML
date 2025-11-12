@@ -1,0 +1,60 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="updateHistoryid"
+        title="Update History"
+        class="sapUiResponsivePadding"
+        stretch="false"
+        resizable="true"
+        draggable="true"
+        contentWidth="auto"
+        contentHeight="auto"
+    >
+        <content>
+            <Table
+                id="idhistorydetails"
+                items="{HistoryModel>/rows}"
+                enableBusyIndicator="true"
+                growing="true"
+                growingThreshold="10"
+                mode="None"
+                noDataText="No history available"
+            >
+                <columns>
+                    <Column>
+                        <Text text="Created By" />
+                    </Column>
+                    <Column>
+                        <Text text="Created On" />
+                    </Column>
+                    <Column>
+                        <Text text="Updated By" />
+                    </Column>
+                    <Column>
+                        <Text text="Updated On" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{path:'HistoryModel>Created_by', formatter:'.formatter.formatCleanText'}" />
+                            <Text text="{path:'HistoryModel>Created_on', formatter:'.formatter.formatDateMMDDYYYY'}" />
+                            <Text text="{path:'HistoryModel>Updated_by', formatter:'.formatter.formatCleanText'}" />
+                            <Text text="{path:'HistoryModel>Updated_on', formatter:'.formatter.formatDateMMDDYYYY'}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+
+        <beginButton>
+            <Button
+                type="Reject"
+                text="{i18n>dialogCloseButtonText}"
+                press=".onUpdateHistoryCloseDiolog"
+            />
+        </beginButton>
+    </Dialog>
+</core:FragmentDefinition>

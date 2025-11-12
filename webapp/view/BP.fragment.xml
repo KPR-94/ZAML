@@ -1,0 +1,116 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        id="bpdialog"
+        title="BP Details"
+        resizable="true"
+        draggable="true"
+        stretch="false"
+        contentHeight="auto"
+        contentWidth="auto"
+        busyIndicatorDelay="0"
+        class="sapUiResponsivePadding"
+    >
+        <content>
+            <l:Grid
+                defaultSpan="L12 M12 S12"
+                hSpacing="1"
+                vSpacing="1"
+            >
+                <l:content>
+                    <Table
+                        id="bpid"
+                        enableBusyIndicator="true"
+                        items="{bpdetailmodel>/items}"
+                        selectionChange="onSelectionChange"
+                        growing="true"
+                        growingThreshold="10"
+                        width="100%"
+                    >
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title
+                                    text="{
+                                        parts: [
+                                            { path: 'i18n>Business_Partner_Data' },
+                                            { path: 'view>/rowcount1' }
+                                        ],
+                                        formatter: '.formatter.formatI18nCount'
+                                    }"
+                                />
+                                <ToolbarSpacer />
+                                <Button
+                                    icon="sap-icon://download"
+                                    type="Emphasized"
+                                    press=".onExportToExcel"
+                                />
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column>
+                                <Text text="{i18n>Business_Partner_ID}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Business_Partner_Name}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Industry_Code}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Compliance_Risk}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Beneficial_Owner_Risk}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Country_Code}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Country_Desc}" />
+                            </Column>
+                            <Column>
+                                <Text text="{i18n>Customer_Subtype}" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{bpdetailmodel>BpNumber}" />
+                                    <Text text="{bpdetailmodel>BpName}" />
+                                    <Text
+                                        text="{path: 'bpdetailmodel>IndustryCodes'}"
+                                    />
+                                    <!-- , formatter: '.formatter.formatIndustryCodes' -->
+                                    <Text text="{bpdetailmodel>ComplianceRisk}" />
+                                    <Text text="{bpdetailmodel>BoOwnerRisk}" />
+                                    <Text text="{bpdetailmodel>CountryKey}" />
+                                    <Text text="{bpdetailmodel>CountryDescr}" />
+                                    <Text text="{bpdetailmodel>CustomerSubtype}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </l:content>
+            </l:Grid>
+        </content>
+        <beginButton>
+            <Button
+                type="Accept"
+                width="100px"
+                text="{i18n>Confirm}"
+                press=".OnConfirm"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                type="Reject"
+                width="100px"
+                text="{i18n>Cancel}"
+                press=".Onclose"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

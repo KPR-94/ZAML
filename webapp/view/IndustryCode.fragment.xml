@@ -1,0 +1,27 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>
+	<Dialog
+		id="IndustryCode"
+		title="AML - Anti-money Laundering Appication"
+		contentWidth= "1000px"
+		contentHeight ="500px"
+	>
+		<content>
+			<VBox width="100%" id="hbox12">
+                <items>
+                    <Button xmlns="sap.m" width ="300px"  press="xyz" class="sapUiLargeMarginBegin"  text="Industry codes" id="xyz"/>
+                    <Button xmlns="sap.m"  width ="300px" class="sapUiLargeMarginBegin" id="xyz2" text="Customer subtype"/>
+                   
+                </items>
+            </VBox>
+		</content>
+		<beginButton>
+			<Button
+				text="{i18n>dialogCloseButtonText}"
+				press=".onCloseDialogIndustryCode"
+			/>
+		</beginButton>
+	</Dialog>
+</core:FragmentDefinition>

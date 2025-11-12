@@ -1,0 +1,67 @@
+html[dir="ltr"] .myAppDemoWT .myCustomButton.sapMBtn {
+	margin-right: 0.125rem
+}
+
+html[dir="rtl"] .myAppDemoWT .myCustomButton.sapMBtn {
+	margin-left: 0.125rem
+}
+
+.myAppDemoWT .myCustomText {
+	display: inline-block;
+	font-weight: bold;
+}
+
+/*	ProductRating */
+.myAppDemoWTProductRating {
+	padding: 0.75rem;
+}
+
+.myAppDemoWTProductRating .sapMRI {
+	vertical-align: initial;
+}
+
+
+.shellStyle .sapUiUfdSpltContPane{
+	width: 100px !important;
+  }
+
+ 
+
+  .columnclass   .sapMListTblCell {
+    background-color:grey ;
+}
+
+.buttonmarginclass{
+	margin-left:130px;
+	
+}
+
+.headermarginclass{
+	margin-left:400px;
+	
+}
+
+.sapUiSizeCompact .sapMPanel .sapMPanelHdr {
+    line-height: 2rem;
+    height: 2rem;
+    margin-left: 750px;
+    margin-right: 760px;
+    background: yellow;
+}
+
+.riskHigh {
+    color: #e74c3c; /* red */
+    font-weight: bold;
+}
+
+.riskMedium {
+    color: #f39c12; /* orange */
+    font-weight: bold;
+}
+
+.riskLow {
+    color: #27ae60; /* green */
+    font-weight: bold;
+}
+
+

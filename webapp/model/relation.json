@@ -1,0 +1,50 @@
+{
+    "relation": [
+        
+        {
+            "Reltype": "ZADMN",
+            "Reldesc": "Admin",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZBANK",
+            "Reldesc": "House Bank",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZBUSSU",
+            "Reldesc": "Business Supplier",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZFUNP",
+            "Reldesc": "Funding Partner",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZINDS",
+            "Reldesc": "Indirect Supplier",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZINTC",
+            "Reldesc": "Inter Company",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZITS",
+            "Reldesc": "IT Supplier",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZLEACU",
+            "Reldesc": "Leasing Customer",
+            "separator":"-"
+        },
+        {
+            "Reltype": "ZTRREC",
+            "Reldesc": "Trading/Re-Marketing",
+            "separator":"-"
+        }
+    ]
+}

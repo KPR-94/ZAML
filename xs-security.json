@@ -1,0 +1,20 @@
+{
+    "xsappname": "amlapp-xsuaa",
+    "tenant-mode": "dedicated",
+    "scopes": [
+      {
+        "name": "$XSAPPNAME.Callback",
+        "description": "Callback scope"
+      }
+    ],
+    "authorities": [
+      "$XSAPPNAME.Callback"
+    ],
+    "oauth2-configuration": {
+      "redirect-uris": [
+        "http://localhost:*/**",
+        "https://*.applicationstudio.cloud.sap/**"
+      ]
+    }
+  }
+  

@@ -1,0 +1,148 @@
+ {
+    "company": [
+        
+        {
+            "compid": "001010",
+            "desc": "Company 1010",
+            "separator":"-"
+        },
+        {
+            "compid": "AT01",
+            "desc": "CHG Austria",
+            "separator":"-"
+        },
+        {
+            "compid": "AU01",
+            "desc": "CHG Australia Pty Limited",
+            "separator":"-"
+        },
+        {
+            "compid": "BE01",
+            "desc": "CHG Belux NV",
+            "separator":"-"
+        },
+        {
+            "compid": "BR01",
+            "desc": "CHG Brasil Loc. de Equip. Ltda",
+            "separator":"-"
+        },
+        {
+            "compid": "BR02",
+            "desc": "CHG Brasil Arren. Mercantil SA",
+            "separator":"-"
+        },
+        {
+            "compid": "CA01",
+            "desc": "CHG Canada Ltd.",
+            "separator":"-"
+        },
+        {
+            "compid": "CH01",
+            "desc": "CHG Schweiz AG",
+            "separator":"-"
+        },
+        {
+            "compid": "CZ01",
+            "desc": "CHG Czech Republic s.r.o",
+            "separator":"-"
+        },
+        {
+            "compid": "DE01",
+            "desc": "CHG AG",
+            "separator":"-"
+        },
+        {
+            "compid": "DE02",
+            "desc": "CHG GmbH",
+            "separator":"-"
+        },
+        {
+            "compid": "DE03",
+            "desc": "CHG Brokerage GmbH",
+            "separator":"-"
+        },
+        {
+            "compid": "DK01",
+            "desc": "CHG Denmark A/S",
+            "separator":"-"
+        },
+        {
+            "compid": "ES01",
+            "desc": "CHG Spain S.L.",
+            "separator":"-"
+        },
+        {
+            "compid": "FI01",
+            "desc": "CHG Finnland OY",
+            "separator":"-"
+        },
+        {
+            "compid": "FR01",
+            "desc": "CHG France SAS",
+            "separator":"-"
+        },
+        {
+            "compid": "GB01",
+            "desc": "CHG UK Limited",
+            "separator":"-"
+        },
+        {
+            "compid": "IE01",
+            "desc": "CHG Ireland Limited",
+            "separator":"-"
+        },
+        {
+            "compid": "IT01",
+            "desc": "CHG Italia S.p.A",
+            "separator":"-"
+        },
+        {
+            "compid": "MX01",
+            "desc": "CHG Mexico S.A.P.I. De C.V.",
+            "separator":"-"
+        },
+        {
+            "compid": "NL01",
+            "desc": "CHG Nederland BV",
+            "separator":"-"
+        },
+        {
+            "compid": "NO01",
+            "desc": "CHG Norway AS",
+            "separator":"-"
+        },
+        {
+            "compid": "NZ01",
+            "desc": "CHG New Zealand Limited",
+            "separator":"-"
+        },
+        {
+            "compid": "PL01",
+            "desc": "CHG Polska sp.z o.o",
+            "separator":"-"
+        },{
+            "compid": "SE01",
+            "desc": "CHG Sweden AB",
+            "separator":"-"
+        },
+        {
+            "compid": "SG01",
+            "desc": "CHG Singapore Pte. Ltd.",
+            "separator":"-"
+        },
+        {
+            "compid": "SI01",
+            "desc": "CHG Slovenia d.o.o.",
+            "separator":"-"
+        },
+        {
+            "compid": "SK01",
+            "desc": "CHG Slovakia s.r.o",
+            "separator":"-"
+        },{
+            "compid": "US01",
+            "desc": "CHG USA Corp.",
+            "separator":"-"
+        } 
+    ]
+}

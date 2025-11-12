@@ -1,0 +1,82 @@
+ID: zaml
+_schema-version: '3.1.0'
+version: 1.0.0
+
+modules:
+  - name: zaml
+    type: html5
+    path: dist           # <-- your built app folder
+    parameters:
+      buildpack: staticfile_buildpack
+    requires:
+      - name: html5_repo_host    # mandatory service for HTML5 apps
+
+resources:
+  # === XSUAA Service ===
+  - name: xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+
+  # === HTML5 App Repo Host ===
+  - name: html5_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+
+      
+
+# ID: zaml
+# _schema-version: '3.1'
+# version: 1.0.6
+
+# modules:
+#   # === UI5 Frontend Module ===
+#   - name: zaml
+#     type: html5
+#     path: dist
+#     build-parameters:
+#       buildpack: staticfile_buildpack
+#       build-result: .
+#       ignore: ["node_modules/", "test/"]
+#     requires:
+#       - name: html5_repo_host
+#         parameters:
+#           content-target: true
+#       - name: xsuaa
+#       - name: backend_api
+#         group: destinations
+#         properties:
+#           name: proxy
+#           url: '~{url}'
+#           forwardAuthToken: true
+
+#   # === Node.js Backend Module ===
+#   - name: amlapp-backend
+#     type: nodejs
+#     path: backend
+#     provides:
+#       - name: backend_api
+#         properties:
+#           url: '${default-url}'
+#     requires:
+#       - name: xsuaa
+
+# resources:
+#   # === XSUAA Service ===
+#   - name: xsuaa
+#     type: org.cloudfoundry.managed-service
+#     parameters:
+#       service: xsuaa
+#       service-plan: application
+#       path: ./xs-security.json
+
+#   # === HTML5 App Repo Host ===
+#   - name: html5_repo_host
+#     type: org.cloudfoundry.managed-service
+#     parameters:
+#       service: html5-apps-repo
+#       service-plan: app-host

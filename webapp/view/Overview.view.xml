@@ -1,0 +1,64 @@
+<mvc:View
+    controllerName="zaml.controller.Overview"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+>
+    <Page
+        backgroundDesign="Solid"
+        showHeader="true"
+    >
+        <content>
+           <Panel >
+             <content>
+               <HBox direction="Row"
+                height="200px"
+                width="100%"
+                fitContainer="true"
+                wrap="NoWrap"
+                renderType="Bare"
+            >
+                <VBox width="100%">
+                    <Button
+                    class="sapUiLargeMarginBegin"
+                        text="{i18n>Customize}"
+                        press=".onOpenDialog"
+                        width ="250px"
+                         
+                        id="button22"
+                    />
+                    <Button
+                    class="sapUiLargeMarginBegin"
+                        text="{i18n>Business_Partner}"
+                        press=".onPressBussinessPartnerData"
+                        width ="250px"
+                         
+                        id="button12"
+                    />
+                    <Button
+                        text="{i18n>Recalculate_Aml_Risk}"
+                        press=".onPressamlrisk"
+                        width ="250px"
+                        class="sapUiLargeMarginBegin"
+                        id="button02"
+                    />
+                    <Button
+                        text="{i18n>Company_ID}"
+                        press=".onCompany"
+                        width ="250px"
+                        class="sapUiLargeMarginBegin"
+                        id="button"
+                    />
+                </VBox>
+                <Image
+                    id="myImageId"
+                    width="3500px"
+                    height="200px"
+                    alt="AML Banner"
+                />
+            </HBox>
+             </content>
+           </Panel>
+        </content>
+    </Page>
+</mvc:View>

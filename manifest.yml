@@ -1,0 +1,6 @@
+applications:
+- name: zaml
+  path: dist
+  memory: 64M
+  buildpacks:
+    - staticfile_buildpack

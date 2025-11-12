@@ -1,0 +1,1953 @@
+<mvc:View
+    controllerName="zaml.controller.Detail"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:wt="zaml.control"
+    xmlns:st="sap.ui.comp.smarttable"
+    xmlns:core="sap.ui.core"
+    xmlns:co="sap.ui.comp"
+    xmlns:ui="sap.ui.table"
+>
+    <Page
+        id="page3"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        backgroundDesign="Transparent"
+        class="sapUiContentPadding"
+    >
+        <ui:Table
+            id="p3_Industry"
+            rows="{tableModel>/rows}"
+            selectionMode="None"
+            fixedColumnCount="2"
+            width="100%"
+            visibleRowCount="{view>/Visiblecount}"
+            visibleRowCountMode="Fixed"
+            enableColumnReordering="true"
+            columnHeaderHeight="35"
+            rowHeight="30"
+        >
+            <!-- Toolbar Header -->
+            <ui:extension>
+                <OverflowToolbar>
+                    <Title
+                        text="{ parts: [
+                        { path: 'i18n>Industry_count' },
+                        { path: 'view>/Indsurtycount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchIndustryId"
+                        width="300px"
+                        placeholder="Search Industry code Hierarchy"
+                        liveChange=".onIndustrySearch"
+                    />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onDataExport"
+                    />
+                </OverflowToolbar>
+            </ui:extension>
+
+            <!-- Column Definitions -->
+            <ui:columns>
+                <ui:Column
+                    hAlign="Begin"
+                    width="50px"
+                >
+                    <Label text="" />
+                    <ui:template>
+                        <RadioButton
+                            groupName="industryRadio"
+                            selected="{= ${tableModel>isSelected} }"
+                            select=".onEditIndustry"
+                        />
+                    </ui:template>
+                </ui:Column>
+                <!-- Industry Code -->
+                <ui:Column
+                    width="150px"
+                    hAlign="Left"
+                    sortProperty="Industry_code"
+                    filterProperty="Industry_code"
+                >
+                    <Label
+                        text="{i18n>Industry_code}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{ path: 'tableModel>Industry_code', formatter: '.formatter.formatCleanText' }"
+                            editable="false"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Industry Description -->
+                <ui:Column
+                    width="230px"
+                    hAlign="Left"
+                    sortProperty="Industry_description"
+                    filterProperty="Industry_description"
+                >
+                    <Label
+                        text="{i18n>Industry_des}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Industry_description}"
+                            editable="{tableModel>editableIndustry_desc}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Level -->
+                <ui:Column
+                    width="90px"
+                    hAlign="Left"
+                    sortProperty="Level"
+                    filterProperty="Level"
+                >
+                    <Label
+                        text="{i18n>Level}"
+                        textAlign="Left"
+                    />
+                    <ui:template>
+                        <Select
+                            selectedKey="{tableModel>Level}"
+                            enabled="{tableModel>editablelevel}"
+                            change="onLevelitem"
+                        >
+                            <items>
+                                <core:Item
+                                    key="1"
+                                    text="1"
+                                />
+                                <core:Item
+                                    key="2"
+                                    text="2"
+                                />
+                                <core:Item
+                                    key="3"
+                                    text="3"
+                                />
+                                <core:Item
+                                    key="4"
+                                    text="4"
+                                />
+                                <core:Item
+                                    key="5"
+                                    text="5"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Risk Level -->
+                <ui:Column
+                    width="150px"
+                    hAlign="Left"
+                    sortProperty="Risk_Level"
+                    filterProperty="Risk_Level"
+                >
+                    <Label
+                        text="{i18n>Risk_Level}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Select
+                            selectedKey="{tableModel>Risk_Level}"
+                            enabled="{tableModel>editableRisk}"
+                        >
+                            <items>
+                                <core:Item
+                                    key=""
+                                    text=""
+                                />
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Parent -->
+                <ui:Column
+                    width="160px"
+                    hAlign="Left"
+                    sortProperty="Parent"
+                    filterProperty="Parent"
+                >
+                    <Label
+                        text="{i18n>Parent}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Parent}"
+                            editable="{tableModel>editableParent}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Category Type -->
+                <ui:Column
+                    width="150px"
+                    hAlign="Left"
+                    sortProperty="Category_type"
+                    filterProperty="Category_type"
+                >
+                    <Label
+                        text="{i18n>Category_type}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Select
+                            selectedKey="{tableModel>Category_type}"
+                            enabled="false"
+                            change="onCategoryItem"
+                        >
+                            <items>
+                                <core:Item
+                                    key="NACE"
+                                    text="NACE"
+                                />
+                                <core:Item
+                                    key="NAICS"
+                                    text="NAICS"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created By -->
+                <ui:Column
+                    width="180px"
+                    hAlign="Left"
+                    sortProperty="Created_by"
+                    filterProperty="Created_by"
+                >
+                    <Label
+                        text="{i18n>Created_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Created_by', formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created On -->
+                <ui:Column
+                    width="100px"
+                    hAlign="Left"
+                    sortProperty="Created_on"
+                    filterProperty="Created_on"
+               
+                >
+                    <Label
+                        text="{i18n>Created_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{
+                                path: 'tableModel>Created_on' 
+                            }"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated By -->
+                <ui:Column
+                    width="100px"
+                    hAlign="Left"
+                    sortProperty="Updated_by"
+                    filterProperty="Updated_by"
+                >
+                    <Label
+                        text="{i18n>Updated_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Updated_by', formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated On -->
+                <ui:Column
+                    width="100px"
+                    hAlign="Left"
+                    sortProperty="Updated_on"
+                    filterProperty="Updated_on"
+                >
+                    <Label
+                        text="{i18n>Updated_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{ path: 'tableModel>Updated_on'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+
+        <Table
+            id="p3_Industry_m"
+            visible="false"
+            items="{tableModel>/rows}"
+            enableBusyIndicator="true"
+            selectionChange="onEditIndustry"
+            mode="SingleSelectLeft"
+            growing="true"
+            growingThreshold="8"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="{i18n>Industry_Code_Hierarchy}" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchIndustryId_m"
+                        width="300px"
+                        placeholder="{i18n>Search_Industry}"
+                        liveChange=".onIndustrySearch"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>Industry_code}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Industry_des}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Level}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Risk_Level}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Parent}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Category_type}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_on}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_on}" />
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input
+                            value="{ path: 'tableModel>Industry_code', formatter: '.formatter.formatCleanText' }"
+                            editable="false"
+                        />
+                        <Input
+                            value="{tableModel>Industry_description}"
+                            editable="{tableModel>editableIndustry_desc}"
+                        />
+                        <Select
+                            selectedKey="{tableModel>Level}"
+                            enabled="{tableModel>editablelevel}"
+                            change="onLevelitem"
+                        >
+                            <items>
+                                <core:Item
+                                    key="1"
+                                    text="1"
+                                />
+                                <core:Item
+                                    key="2"
+                                    text="2"
+                                />
+                                <core:Item
+                                    key="3"
+                                    text="3"
+                                />
+                                <core:Item
+                                    key="4"
+                                    text="4"
+                                />
+                                <core:Item
+                                    key="5"
+                                    text="5"
+                                />
+                            </items>
+                        </Select>
+                        <Select
+                            selectedKey="{tableModel>Risk_Level}"
+                            enabled="{tableModel>editableRisk}"
+                        >
+                            <items>
+                                <core:Item
+                                    key=""
+                                    text=""
+                                />
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                        <Input
+                            value="{tableModel>Parent}"
+                            editable="{tableModel>editableParent}"
+                        />
+                        <Select
+                            selectedKey="{tableModel>Category_type}"
+                            enabled="false"
+                            change="onCategoryItem"
+                        >
+                            <!-- enabled="{tableModel>editablecat}" -->
+                            <items>
+                                <core:Item
+                                    key="NACE"
+                                    text="NACE"
+                                />
+                                <core:Item
+                                    key="NAICS"
+                                    text="NAICS"
+                                />
+                            </items>
+                        </Select>
+                        <Text
+                            text="{path:'tableModel>Created_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                        <Text
+                            text="{ path: 'tableModel>Created_on', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+
+                        <Text
+                            text="{ path: 'tableModel>Updated_on', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <ui:Table
+            id="p3_Customer_subtype"
+            rows="{tableModel>/rows}"
+            selectionMode="None"
+            fixedColumnCount="2"
+            width="auto"
+            visibleRowCountMode="Fixed"
+            enableColumnReordering="true"
+            columnHeaderHeight="35"
+            rowHeight="30"
+            visibleRowCount="{view>/Visiblecount}"
+        >
+            <!-- Toolbar Header -->
+            <ui:extension>
+                <OverflowToolbar>
+                    <Title
+                        text="{ parts: [
+                        { path: 'i18n>Customer_Subtype1' },
+                        { path: 'view>/Indsurtycount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchcustsubtype"
+                        width="300px"
+                        placeholder="Search Customer Type"
+                        liveChange=".onCustometSubtype"
+                    />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onDataExport_cust"
+                    />
+                </OverflowToolbar>
+            </ui:extension>
+
+            <!-- Column Definitions -->
+            <ui:columns>
+                <ui:Column
+                    hAlign="Begin"
+                    width="50px"
+                >
+                    <Label text="" />
+                    <ui:template>
+                        <RadioButton
+                            groupName="industryRadio"
+                            selected="{= ${tableModel>isSelected} }"
+                            select=".onEditIndustry"
+                        />
+                    </ui:template>
+                </ui:Column>
+                 
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Customer_subtype"
+                    filterProperty="Customer_subtype"
+                >
+                    <Label
+                        text="{i18n>Customer_Subtype}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{ path: 'tableModel>Customer_subtype', formatter: '.formatter.formatCleanText' }"
+                            editable="false"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Industry Description -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Description"
+                    filterProperty="Description"
+                >
+                    <Label
+                        text="{i18n>Desc}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Description}"
+                            editable="{tableModel>editable}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Risk Level -->
+                <ui:Column
+                    width="110px"
+                    hAlign="Left"
+                    sortProperty="Risk_level"
+                    filterProperty="Risk_level"
+                >
+                    <Label
+                        text="{i18n>Risk_Level}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Select
+                            selectedKey="{tableModel>Risk_level}"
+                            enabled="{tableModel>editable}"
+                        >
+                            <items>
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+                <!-- Created By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Created_By"
+                    filterProperty="Created_By"
+                >
+                    <Label
+                        text="{i18n>Created_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Created_By',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Created_On"
+                    filterProperty="Created_On" 
+                >
+                    <Label
+                        text="{i18n>Created_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_On' }"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Updated_by"
+                    filterProperty="Updated_by"
+                >
+                    <Label
+                        text="{i18n>Updated_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Updated_On"
+                    filterProperty="Updated_On" 
+                >
+                    <Label
+                        text="{i18n>Updated_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Updated_On}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_On' }"
+                        />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+
+        <Table
+            id="p3_Customer_subtype1"
+            headerText="{i18n>Customer_Subtype}"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            visible="false"
+            enableBusyIndicator="true"
+            items="{tableModel>/rows}"
+            mode="SingleSelectLeft"
+            growing="true"
+            growingThreshold="8"
+            selectionChange="onEditIndustry"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="{i18n>Customer_Subtype}" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchcustsubtype1"
+                        width="300px"
+                        placeholder="Search Customer Type"
+                        liveChange=".onCustometSubtype"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>Customer_Subtype}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Desc}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Risk_Level}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_on}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_on}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input
+                            value="{tableModel>Customer_subtype}"
+                            editable="false"
+                        />
+                        <Input
+                            value="{tableModel>Description}"
+                            editable="{tableModel>editable}"
+                        />
+                        <!-- <Input  value="{tableModel>Risk_level}" editable="{tableModel>editable}" /> -->
+                        <Select
+                            selectedKey="{tableModel>Risk_level}"
+                            enabled="{tableModel>editable}"
+                        >
+                            <items>
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                        <Text
+                            text="{path:'tableModel>Created_By',formatter: '.formatter.formatCleanText'}"
+                        />
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_On', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                        <!-- <Text text="{tableModel>Updated_On}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_On', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <ui:Table
+            id="p3_Country"
+            rows="{tableModel>/rows}"
+            selectionMode="None"
+            fixedColumnCount="2"
+            width="auto"
+            visibleRowCountMode="Fixed"
+            enableColumnReordering="true"
+            columnHeaderHeight="35"
+            rowHeight="30"
+            visibleRowCount="{view>/Visiblecount}"
+        >
+            <!-- Toolbar Header -->
+            <ui:extension>
+                <OverflowToolbar>
+                    <Title
+                        text="{ parts: [
+                        { path: 'i18n>Coutry_code' },
+                        { path: 'view>/Indsurtycount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+
+                    <ToolbarSpacer />
+                    <SearchField
+                        width="300px"
+                        id="searchCountry"
+                        placeholder="Search CountryCode"
+                        liveChange=".onCountrySearch"
+                    />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onDataExport_code"
+                    />
+                </OverflowToolbar>
+            </ui:extension>
+
+            <!-- Column Definitions -->
+            <ui:columns>
+                <ui:Column
+                    hAlign="Begin"
+                    width="50px"
+                >
+                    <Label text="" />
+                    <ui:template>
+                        <RadioButton
+                            groupName="industryRadio"
+                            selected="{= ${tableModel>isSelected} }"
+                            select=".onEditIndustry"
+                        />
+                    </ui:template>
+                </ui:Column>
+                <!-- Industry Code -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Country_code"
+                    filterProperty="Country_code"
+                >
+                    <Label
+                        text="{i18n>Country_Code}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{ path: 'tableModel>Country_code', formatter: '.formatter.formatCleanText' }"
+                            editable="false"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Industry Description -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Country_description"
+                    filterProperty="Country_description"
+                >
+                    <Label
+                        text="{i18n>Country_Desc}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Country_description}"
+                            editable="{tableModel>editable}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Risk Level -->
+                <ui:Column
+                    width="110px"
+                    hAlign="Left"
+                    sortProperty="Risk_level"
+                    filterProperty="Risk_level"
+                >
+                    <Label
+                        text="{i18n>Risk_Level}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Select
+                            selectedKey="{tableModel>Risk_level}"
+                            enabled="{tableModel>editable}"
+                        >
+                            <items>
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+                <!-- Created By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Created_by"
+                    filterProperty="Created_by"
+                >
+                    <Label
+                        text="{i18n>Created_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Created_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Created_on"
+                    filterProperty="Created_on" 
+                >
+                    <Label
+                        text="{i18n>Created_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_on' }"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Updated_by"
+                    filterProperty="Updated_by"
+                >
+                    <Label
+                        text="{i18n>Updated_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Updated_on"
+                    filterProperty="Updated_on" 
+                >
+                    <Label
+                        text="{i18n>Updated_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Updated_On}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_on' }"
+                        />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+
+        <Table
+            id="p3_Country1"
+            headerText="Country"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            visible="false"
+            enableBusyIndicator="true"
+            items="{tableModel>/rows}"
+            mode="SingleSelectLeft"
+            growing="true"
+            growingThreshold="10"
+            selectionChange="onEditIndustry"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="Country" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchCountry1"
+                        width="300px"
+                        placeholder="Search Country Code or Description"
+                        liveChange="onCountrySearch"
+                    />
+                </Toolbar>
+            </headerToolbar>
+
+            <columns>
+                <Column>
+                    <Text text="{i18n>Country_Code}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Country_Desc}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Risk_Level}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_on}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_on}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input
+                            value="{tableModel>Country_code}"
+                            editable="false"
+                        />
+                        <Input
+                            value="{tableModel>Country_description}"
+                            editable="{tableModel>editable}"
+                        />
+
+                        <Select
+                            selectedKey="{tableModel>Risk_level}"
+                            enabled="{tableModel>editable}"
+                        >
+                            <items>
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+
+                        <Text
+                            text="{path: 'tableModel>Created_by', formatter: '.formatter.formatCleanText'}"
+                        />
+                        <!-- <Text text="{path: '{tableModel>Created_by}', formatter: '.formatter.formatCleanText'}" /> -->
+                        <!-- <Text text="{tableModel>Created_on}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_on', formatter: '.formatter.formatDateMMDDYYYY'}"
+                        />
+
+                        <!-- <Text text="{tableModel>Updated_on}" />  -->
+                        <Text
+                            text="{path: 'tableModel>Updated_by', formatter: '.formatter.formatCleanText'}"
+                        />
+                        <Text
+                            text="{ path: 'tableModel>Updated_on', formatter: '.formatter.formatDateMMDDYYYY'}"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <ui:Table
+            id="p3_Riskweightage"
+            rows="{tableModel>/rows}"
+            selectionMode="None"
+            fixedColumnCount="2"
+            width="auto"
+            visibleRowCountMode="Fixed"
+            enableColumnReordering="true"
+            columnHeaderHeight="35"
+            rowHeight="30"
+            visibleRowCount="{view>/Visiblecount}"
+        >
+            <!-- Toolbar Header -->
+            <ui:extension>
+                <OverflowToolbar>
+                    <Title
+                        text="{ parts: [
+                        { path: 'i18n>Risk_w' },
+                        { path: 'view>/Indsurtycount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchriskweightage"
+                        width="300px"
+                        placeholder="Search Risk Weightage"
+                        liveChange=".onRiskweightage"
+                    />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onDataExport_wighatge"
+                    />
+                </OverflowToolbar>
+            </ui:extension>
+
+            <!-- Column Definitions -->
+            <ui:columns>
+                <ui:Column
+                    hAlign="Begin"
+                    width="50px"
+                >
+                    <Label text="" />
+                    <ui:template>
+                        <RadioButton
+                            groupName="industryRadio"
+                            selected="{= ${tableModel>isSelected} }"
+                            select=".onEditIndustry"
+                        />
+                    </ui:template>
+                </ui:Column>
+                <!-- Industry Code -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Risk_field"
+                    filterProperty="Risk_field"
+                >
+                    <Label
+                        text="{i18n>Risk_field}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Risk_field}"
+                            editable="false"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Industry Description -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Weightage"
+                    filterProperty="Weightage"
+                >
+                    <Label
+                        text="{i18n>Weightage}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Weightage}"
+                            editable="{tableModel>editable}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Created_by"
+                    filterProperty="Created_by"
+                >
+                    <Label
+                        text="{i18n>Created_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Created_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Created_on"
+                    filterProperty="Created_on"
+                >
+                    <Label
+                        text="{i18n>Created_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_on'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Updated_by"
+                    filterProperty="Updated_by"
+                >
+                    <Label
+                        text="{i18n>Updated_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Updated_on"
+                    filterProperty="Updated_on" 
+                >
+                    <Label
+                        text="{i18n>Updated_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Updated_On}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_on' }"
+                        />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+
+        <Table
+            id="p3_Riskweightage1"
+            headerText="Risk Weightage"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            visible="false"
+            enableBusyIndicator="true"
+            items="{tableModel>/rows}"
+            mode="SingleSelectLeft"
+            growing="true"
+            growingThreshold="8"
+            selectionChange="onEditIndustry"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="Risk Weightage" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchriskweightage1"
+                        width="300px"
+                        placeholder="Search Risk Weightage"
+                        liveChange=".onRiskweightage"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>Risk_field}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Weightage}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_on}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_on}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input
+                            value="{tableModel>Risk_field}"
+                            editable="false"
+                        />
+                        <Input
+                            value="{tableModel>Weightage}"
+                            editable="{tableModel>editable}"
+                        />
+
+                        <Text
+                            text="{path:'tableModel>Created_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                        <!-- <Text text="{tableModel>Created_on}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_on', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                        <!-- <Text text="{tableModel>Updated_on}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_on', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <ui:Table
+            id="p3_RiskValue"
+            rows="{tableModel>/rows}"
+            selectionMode="None"
+            fixedColumnCount="2"
+            width="auto"
+            visibleRowCountMode="Fixed"
+            enableColumnReordering="true"
+            columnHeaderHeight="35"
+            rowHeight="30"
+            visibleRowCount="{view>/Visiblecount}"
+        >
+            <!-- Toolbar Header -->
+            <ui:extension>
+                <OverflowToolbar>
+                    <Title
+                        text="{ parts: [
+                        { path: 'i18n>Risk_Value' },
+                        { path: 'view>/Indsurtycount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchRiskValue"
+                        width="300px"
+                        placeholder="Search Risk Value"
+                        liveChange=".onRiskValue"
+                    />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onDataExport_Risk"
+                    />
+                </OverflowToolbar>
+            </ui:extension>
+
+            <!-- Column Definitions -->
+            <ui:columns>
+                <ui:Column
+                    hAlign="Begin"
+                    width="50px"
+                >
+                    <Label text="" />
+                    <ui:template>
+                        <RadioButton
+                            groupName="industryRadio"
+                            selected="{= ${tableModel>isSelected} }"
+                            select=".onEditIndustry"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <ui:Column
+                    width="110px"
+                    hAlign="Left"
+                    sortProperty="Risk"
+                    filterProperty="Risk"
+                >
+                    <Label
+                        text="{i18n>Risk_field}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Input  value="{tableModel>Risk}"  editable="{tableModel>editable}"/> -->
+                        <Select
+                            selectedKey="{tableModel>Risk}"
+                            enabled="false"
+                        >
+                            <items>
+                                <core:Item
+                                    key="No"
+                                    text="No"
+                                />
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+
+                <ui:Column
+                    width="110px"
+                    hAlign="Left"
+                    sortProperty="Value"
+                    filterProperty="Value"
+                >
+                    <Label
+                        text="{i18n>Value}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>Value}"
+                            editable="{tableModel>editable}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Created_by"
+                    filterProperty="Created_by"
+                >
+                    <Label
+                        text="{i18n>Created_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Created_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Created_on"
+                    filterProperty="Created_on" 
+                >
+                    <Label
+                        text="{i18n>Created_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_on'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Updated_by"
+                    filterProperty="Updated_by"
+                >
+                    <Label
+                        text="{i18n>Updated_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Updated_on"
+                    filterProperty="Updated_on" 
+                >
+                    <Label
+                        text="{i18n>Updated_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Updated_On}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_on'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+
+        <Table
+            id="p3_RiskValue1"
+            enableBusyIndicator="true"
+            items="{tableModel>/rows}"
+            mode="SingleSelectLeft"
+            growing="true"
+            growingThreshold="8"
+            visible="false"
+            selectionChange="onEditIndustry"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="Risk Value" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchRiskValue1"
+                        width="300px"
+                        placeholder="Search Risk Value"
+                        liveChange=".onRiskValue"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>Risk}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Value}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_on}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_on}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <!-- <Input  value="{tableModel>Risk}"  editable="{tableModel>editable}"/> -->
+                        <Select
+                            selectedKey="{tableModel>Risk}"
+                            enabled="false"
+                        >
+                            <items>
+                                <core:Item
+                                    key="No"
+                                    text="No"
+                                />
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                        <Input
+                            value="{tableModel>Value}"
+                            editable="{tableModel>editable}"
+                        />
+                        <!-- <Text text="{tableModel>Created_on}" />  -->
+                        <Text
+                            text="{path:'tableModel>Created_by', formatter:'formatter.formatCleanText'}"
+                        />
+                        <Text
+                            text="{ path: 'tableModel>Created_on', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+
+                        <!-- <Text text="{tableModel>Updated_on}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_on', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter:'formatter.formatCleanText'}"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <ui:Table
+            id="P3_RiskValueRange"
+            rows="{tableModel>/rows}"
+            selectionMode="None"
+            fixedColumnCount="2"
+            width="auto"
+            visibleRowCountMode="Fixed"
+            enableColumnReordering="true"
+            columnHeaderHeight="35"
+            rowHeight="30"
+            visibleRowCount="{view>/Visiblecount}"
+        >
+            <!-- Toolbar Header -->
+            <ui:extension>
+                <OverflowToolbar>
+                    <Title
+                        text="{ parts: [
+                        { path: 'i18n>Risk_Value' },
+                        { path: 'view>/Indsurtycount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchRiskValueRange"
+                        width="300px"
+                        placeholder="Search Risk Value Range"
+                        liveChange=".onRiskValueRange"
+                    />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onDataExport_Range"
+                    />
+                </OverflowToolbar>
+            </ui:extension>
+
+            <!-- Column Definitions -->
+            <ui:columns>
+                <ui:Column
+                    hAlign="Begin"
+                    width="50px"
+                >
+                    <Label text="" />
+                    <ui:template>
+                        <RadioButton
+                            groupName="industryRadio"
+                            selected="{= ${tableModel>isSelected} }"
+                            select=".onEditIndustry"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="AML_Risk_Value_Low"
+                    filterProperty="AML_Risk_Value_Low"
+                >
+                    <Label
+                        text="{i18n>AML_Risk_Value_Low}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>AML_Risk_Value_Low}"
+                            editable="false"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="AML_Risk_Value_High"
+                    filterProperty="AML_Risk_Value_High"
+                >
+                    <Label
+                        text="{i18n>AML_Risk_Value_High}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Input
+                            value="{tableModel>AML_Risk_Value_High}"
+                            editable="false"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="AML_Risk"
+                    filterProperty="AML_Risk"
+                >
+                    <Label
+                        text="{i18n>AML_Risk}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Select
+                            selectedKey="{tableModel>AML_Risk}"
+                            enabled="{tableModel>editable}"
+                        >
+                            <items>
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Created_By"
+                    filterProperty="Created_By"
+                >
+                    <Label
+                        text="{i18n>Created_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Created_By',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Created On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Created_On"
+                    filterProperty="Created_On" 
+                >
+                    <Label
+                        text="{i18n>Created_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{ path: 'tableModel>Created_On'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated By -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="Left"
+                    sortProperty="Updated_by"
+                    filterProperty="Updated_by"
+                >
+                    <Label
+                        text="{i18n>Updated_by}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter: '.formatter.formatCleanText'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+
+                <!-- Updated On -->
+                <ui:Column
+                    autoResizable="true"
+                    hAlign="End"
+                    sortProperty="Updated_On"
+                    filterProperty="Updated_On" 
+                >
+                    <Label
+                        text="{i18n>Updated_on}"
+                        textAlign="Begin"
+                    />
+                    <ui:template>
+                        <!-- <Text text="{tableModel>Updated_On}" /> -->
+                        <Text
+                            text="{ path: 'tableModel>Updated_On'}"
+                        />
+                    </ui:template>
+                </ui:Column>
+            </ui:columns>
+        </ui:Table>
+        <Table
+            id="P3_RiskValueRange1"
+            enableBusyIndicator="true"
+            items="{tableModel>/rows}"
+            mode="SingleSelectLeft"
+            growing="true"
+            growingThreshold="8"
+            selectionChange="onEditIndustry"
+            visible="false"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="Risk Value Range" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        id="searchRiskValueRange1"
+                        width="300px"
+                        placeholder="Search Risk Value Range"
+                        liveChange=".onRiskValueRange"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>AML_Risk_Value_Low}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>AML_Risk_Value_High}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>AML_Risk}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Created_on}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_by}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>Updated_on}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input
+                            value="{tableModel>AML_Risk_Value_Low}"
+                            editable="false"
+                        />
+                        <Input
+                            value="{tableModel>AML_Risk_Value_High}"
+                            editable="false"
+                        />
+
+                        <Select
+                            selectedKey="{tableModel>AML_Risk}"
+                            enabled="{tableModel>editable}"
+                        >
+                            <items>
+                                <core:Item
+                                    key="Low"
+                                    text="Low"
+                                />
+                                <core:Item
+                                    key="High"
+                                    text="High"
+                                />
+                                <core:Item
+                                    key="Medium"
+                                    text="Medium"
+                                />
+                            </items>
+                        </Select>
+
+                        <!-- <Input  value="{tableModel>AML_Risk}" editable="{tableModel>editable}" /> -->
+                        <!-- <Text text="{tableModel>Created_On}"  />  -->
+                        <Text
+                            text="{path:'tableModel>Created_By', formatter:'.formatter.formatCleanText'}"
+                        />
+                        <Text
+                            text="{ path: 'tableModel>Created_On', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+
+                        <!-- <Text text="{tableModel>Created_On}" />  -->
+                        <Text
+                            text="{path:'tableModel>Updated_by',formatter:'.formatter.formatCleanText'}"
+                        />
+
+                        <Text
+                            text="{ path: 'tableModel>Updated_On', formatter: '.formatter.formatDateMMDDYYYY' }"
+                        />
+
+                        <VBox>
+                            <HBox>
+                                <Button
+                                    text=" "
+                                    visible="false"
+                                />
+                            </HBox>
+                        </VBox>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <footer>
+            <OverflowToolbar id="otbFooter">
+                <ToolbarSpacer />
+                <Button
+                    id="Bupdate"
+                    type="Accept"
+                    width="110px"
+                    enabled="false"
+                    visible="true"
+                    press="updatequery"
+                    text="Update"
+                />
+                <Button
+                    id="Bdelete"
+                    type="Reject"
+                    width="110px"
+                    enabled="false"
+                    visible="true"
+                    press="deletequery"
+                    text="Delete"
+                />
+
+                <Button
+                    type="Accept"
+                    width="110px"
+                    press="fetchData"
+                    visible="false"
+                    text="Fetch Records"
+                />
+                <Button
+                    id="Bcreate"
+                    type="Accept"
+                    width="110px"
+                    press="CreateRecord"
+                    enabled="true"
+                    visible="true"
+                    text="Create Record"
+                />
+                <Button
+                    id="inputedit"
+                    type="Accept"
+                    width="110px"
+                    visible="false"
+                    press="enableedit"
+                    text="Modify Data"
+                />
+
+                <Button
+                    id="idUpdateHistory"
+                    type="Accept"
+                    width="125px"
+                    visible="true"
+                    press="onExpandPress"
+                    text="Change History"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

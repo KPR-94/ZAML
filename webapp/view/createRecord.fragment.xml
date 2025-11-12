@@ -1,0 +1,105 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout.form"
+>
+    <Dialog
+        id="createRecorsid"
+        title="Create Record"
+        contentWidth="700px"
+        class="sapUiResponsivePadding"
+    >
+        <content>
+            <layout:SimpleForm
+               editable="true"
+                    layout="ResponsiveGridLayout"
+                    labelSpanL="4"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanL="0"
+                    emptySpanM="0"
+                    columnsL="2"
+                    columnsM="2"
+                    columnsXL="2"
+            >
+               <!-- Risk -->
+                <Label id="L7" text="Risk" required="true" />
+                <Select id="riskID" selectedKey="No" width="50%">
+                    <items>
+                        <core:Item key="No" text="No" />
+                        <core:Item key="Low" text="Low" />
+                        <core:Item key="Medium" text="Medium" />
+                        <core:Item key="High" text="High" />
+                    </items>
+                </Select>
+
+                <!-- Industry Code / Subtype / Country Code / Risk Field -->
+                <Label id="L1" text="Label1" required="true" />
+                <Input id="inputID" width="50%" />
+                <Label id="L111" text="Risk field" required="true" />
+                <Select id="inputweighte" selectedKey="Beneficial Owner Risk" width="50%" visible="true">
+                    <items>
+                        <core:Item key="Beneficial Owner Risk" text="Beneficial Owner Risk" />
+                        <core:Item key="Compliance Risk" text="Compliance Risk" />
+                        <core:Item key="Country Risk" text="Country Risk" />
+                        <core:Item key="Customer Type Risk" text="Customer Type Risk" />
+                        <core:Item key="Industry Code Risk" text="Industry Code Risk" />
+                    </items>
+                </Select>
+                
+                <!-- Category Type -->
+                <Label id="L6" text="Category Type" required="true" />
+                <Select id="inputCol3" selectedKey="NACE" change=".onCatagory" width="50%">
+                    <items>
+                        <core:Item key="NACE" text="NACE" />
+                        <core:Item key="NAICS" text="NAICS" />
+                    </items>
+                </Select>
+                <!-- Description / Weightage / Value High / Value -->
+                <Label id="L2" text="Label2" required="true" />
+                <Input id="inputCol1" width="50%" />
+
+
+                <!-- Level -->
+                <Label id="L3" text="Level" required="true" />
+                <Input id="inputID2" width="50%" />
+                <Label text="Level" />
+                <Select id="Idlevel" selectedKey="1" width="50%" change="onLevel">
+                    <items>
+                        <core:Item key="1" text="1" />
+                        <core:Item key="2" text="2" />
+                        <core:Item key="3" text="3" />
+                        <core:Item key="4" text="4" />
+                        <core:Item key="5" text="5" />
+                    </items>
+                </Select>
+
+                <!-- Risk Level -->
+                <Label id="L4" text="Risk Level" required="true" />
+                <Input id="inputCol21" width="50%" />
+                <Label text="Risk Level" />
+                <Select id="inputCol2" selectedKey="Low" width="50%">
+                    <items>
+                        <core:Item key="Low" text="Low" />
+                        <core:Item key="Medium" text="Medium" />
+                        <core:Item key="High" text="High" />
+                    </items>
+                </Select>
+
+                <!-- Parent -->
+                <Label id="L5" text="Parent" required="true" />
+                <Input id="inputID3" width="50%" />
+
+               
+            </layout:SimpleForm>
+        </content>
+
+        <beginButton>
+            <Button text="Save" type="Accept" press="createquery" />
+        </beginButton>
+        <endButton>
+            <Button text="Cancel" type="Reject" press=".oncreateCloseDialog" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

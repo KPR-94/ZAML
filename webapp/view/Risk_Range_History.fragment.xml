@@ -1,0 +1,97 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="Riskrangeid"
+        title="{i18n>Risk_Range_History}"
+        class="sapUiResponsivePadding"
+        stretch="false"
+        resizable="true"
+        draggable="true"
+        contentWidth="auto"
+        contentHeight="auto"
+    >
+        <content>
+            <Table
+                id="Riskrangehistoryid"
+                items="{HistoryModel>/rows}"
+                enableBusyIndicator="true"
+                growing="true"
+                growingThreshold="10"
+                mode="None"
+                noDataText="{i18n>No_history_available}"
+            >
+            <headerToolbar>
+                <Toolbar>
+                <Title
+                        text="{ parts: [
+                        { path: 'i18n>History_count' },
+                        { path: 'view>/HistoryCount' } ],
+                    formatter: '.formatter.formatI18nCount' }"
+                    />
+                <ToolbarSpacer />
+                    <Button
+                        icon="sap-icon://download"
+                        tooltip="Export to Excel"
+                        press=".onExportRiskRangeHistory"
+                    />
+                </Toolbar>
+            </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>AML_Risk_Value_Low}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>AML_Risk_Value_High}" />
+                    </Column>
+                     <Column>
+                        <Text text="{i18n>AML_Risk}" />
+                    </Column>
+                    <Column>
+                         <Text text="{i18n>Created_by}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>Created_on}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>Updated_by}" />
+                    </Column>
+                     <Column>
+                        <Text text="{i18n>Updated_on}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>Action}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{path:'HistoryModel>Risk_Range_Low', formatter:'.formatter.formatCleanText'}" />
+                            <Text text="{path:'HistoryModel>Risk_Range_High', formatter:'.formatter.formatCleanText'}" />
+                            <Text text="{path:'HistoryModel>AML_Risk', formatter:'.formatter.formatCleanText'}" />    
+                            <Text text="{path:'HistoryModel>Created_by', formatter:'.formatter.formatCleanText'}" />
+                            <Text text="{path:'HistoryModel>Created_On', formatter:'.formatter.formatDateMMDDYYYY'}" />
+                            <Text text="{path:'HistoryModel>Updated_by', formatter:'.formatter.formatCleanText'}" />
+                            <Text text="{path:'HistoryModel>Updated_On', formatter:'.formatter.formatDateMMDDYYYY'}" />
+                         <!-- <Text text="{path:'HistoryModel>Action', formatter:'.formatter.getActionStatus'}" /> -->
+                         <ObjectStatus
+                                text="{path:'HistoryModel>Action',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{path:'HistoryModel>ComActionpliance_Risk',formatter: '.formatter.formatCleanText'}"
+                                state="{path: 'HistoryModel>Action', formatter: '.formatter.getActionStatus'}"
+                            />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+
+        <beginButton>
+            <Button
+                type="Reject"
+                text="{i18n>dialogCloseButtonText}"
+                press=".onUpdateHistoryCloseDiolog"
+            />
+        </beginButton>
+    </Dialog>
+</core:FragmentDefinition>

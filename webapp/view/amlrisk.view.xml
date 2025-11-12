@@ -1,0 +1,338 @@
+<mvc:View
+    controllerName="zaml.controller.amlrisk"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:ui="sap.ui.table"
+>
+    <Page
+        id="page5"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+    >
+        <!-- Table: BP Risk Calculation -->
+         <ui:Table
+                id="p3_Country_3242"
+                rows="{tableModel>/rows}"
+                selectionMode="None"
+                fixedColumnCount="2"
+                width="100%"
+                visibleRowCount="10"
+                visibleRowCountMode="Fixed"
+                enableColumnReordering="true"
+                columnHeaderHeight="35"
+                rowHeight="30"
+            >
+                <ui:extension>
+                    <OverflowToolbar>
+                        <Title
+                            
+                            text="{
+                    parts: [
+                        { path: 'i18n>Business_Partner_Data' },
+                        { path: 'Setdefaultmodel>/rowcount' }
+                    ],
+                    formatter: '.formatter.formatI18nCount'
+                }"
+                        />
+                        <ToolbarSpacer />
+                        <SearchField
+                            id="searchBusinesPart11"
+                            placeholder="Search Business Partner Data"
+                            liveChange=".onBusinessPart"
+                            width="300px"
+                        />
+                        <Button
+                            id="exportid11"
+                            icon="sap-icon://download"
+                            tooltip="Export to Excel"
+                            press=".onDataExport"
+                        />
+                    </OverflowToolbar>
+                </ui:extension>
+
+                <!-- Column Definitions -->
+                <ui:columns>
+                    <ui:Column
+                        width="150px"
+                        hAlign="Left"
+                        sortProperty="Business_Partner_ID"
+                        filterProperty="Business_Partner_ID"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>Business_Partner_ID}"
+                        />
+                        <ui:template>
+                            <Text
+                                text="{path:'tableModel>Business_Partner_ID',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>Business_Partner_ID}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="230px"
+                        hAlign="Left"
+                        sortProperty="BP_Name"
+                        filterProperty="BP_Name"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>Business_Partner_Name}"
+                        />
+                        <ui:template>
+                            <Text
+                                text="{path:'tableModel>BP_Name',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>BP_Name}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="90px"
+                        hAlign="Left"
+                        sortProperty="Country"
+                        filterProperty="Country"
+                    >
+                        <Label
+                            textAlign="Left"
+                            text="{i18n>Country}"
+                        />
+                        <ui:template>
+                            <Text
+                                text="{path:'tableModel>Country',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>Country}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="150px"
+                        hAlign="Left"
+                        sortProperty="Customer_subtype"
+                        filterProperty="Customer_subtype"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>Customer_Subtype}"
+                        />
+                        <ui:template>
+                            <Text
+                                text="{path:'tableModel>Customer_subtype',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>Customer_subtype}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="160px"
+                        hAlign="Left"
+                        sortProperty="Industry_Codes"
+                        filterProperty="Industry_Codes"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>Industry_Code}"
+                        />
+                        <ui:template>
+                            <Text
+                                text="{path:'tableModel>Industry_Codes',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>Industry_Codes}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="150px"
+                        hAlign="Left"
+                        sortProperty="Compliance_Risk"
+                        filterProperty="Compliance_Risk"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>Compliance_Risk}"
+                        />
+                        <ui:template>
+                            <!-- <Text
+                                text="{path:'tableModel>Compliance_Risk',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>Compliance_Risk}"
+                            /> -->
+
+                            <ObjectStatus
+                                text="{path:'tableModel>Compliance_Risk',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{path:'tableModel>Compliance_Risk',formatter: '.formatter.formatCleanText'}"
+                                state="{path: 'tableModel>Compliance_Risk', formatter: '.formatter.getRiskStatus'}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="180px"
+                        hAlign="Left"
+                        sortProperty="Beneficial_Owner_Risk"
+                        filterProperty="Beneficial_Owner_Risk"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>Beneficial_Owner_Risk}"
+                        />
+                        <ui:template>
+                            <!-- <Text
+                                text="{path:'tableModel>Beneficial_Owner_Risk',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>Beneficial_Owner_Risk}"
+                            /> -->
+
+                            <ObjectStatus
+                                text="{path:'tableModel>Beneficial_Owner_Risk',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{path:'tableModel>Beneficial_Owner_Risk',formatter: '.formatter.formatCleanText'}"
+                                state="{path: 'tableModel>Beneficial_Owner_Risk', formatter: '.formatter.getRiskStatus'}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+
+                    <ui:Column
+                        width="100px"
+                        hAlign="Left"
+                        sortProperty="AML_Risk"
+                        filterProperty="AML_Risk"
+                    >
+                        <Label
+                            textAlign="Begin"
+                            text="{i18n>AML_Risk}"
+                        />
+                        <ui:template>
+                            <!-- <Text
+                                text="{path:'tableModel>AML_Risk',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{tableModel>AML_Risk}"
+                                class="{path:'tableModel>AML_Risk',formatter: '.formatter.getRiskColorClass'}"
+                            /> -->
+
+                            <ObjectStatus
+                                text="{path:'tableModel>AML_Risk',formatter: '.formatter.formatCleanText'}"
+                                tooltip="{path:'tableModel>AML_Risk',formatter: '.formatter.formatCleanText'}"
+                                state="{path: 'tableModel>AML_Risk', formatter: '.formatter.getRiskStatus'}"
+                            />
+                        </ui:template>
+                    </ui:Column>
+                </ui:columns>
+            </ui:Table>
+        <Table
+            id="p3_Country_32421"
+            headerText="Submit the Data to Calculate Risk"
+            class="sapUiResponsiveMargin"
+            visible="false"
+            enableBusyIndicator="true"
+            items="{tableModel>/items}"
+            selectionChange="onSelectionChange"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="Business Partner Data" />
+                    <ToolbarSpacer />
+                    <Button
+                            id="exportid1"
+                            icon="sap-icon://download"
+                            tooltip="Export to Excel"
+                            press=".onDataExport"
+                        />
+                </Toolbar>
+            </headerToolbar>
+
+            <columns>
+                <Column><Text text="{i18n>Business_Partner_ID}" /></Column>
+                <Column><Text text="{i18n>Business_Partner_Name}" /></Column>
+                <Column><Text text="{i18n>Compliance_Risk}" /></Column>
+                <Column><Text text="{i18n>Beneficial_Owner_Risk}" /></Column>
+                <Column><Text text="{i18n>Country_Code}" /></Column>
+                <Column><Text text="{i18n>Country_Desc}" /></Column>
+                <Column><Text text="{i18n>Customer_Subtype}" /></Column>
+                <Column><Text text="" /></Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text text="{tableModel1>BpNumber}" />
+                        <Text text="{tableModel1>BpName}" />
+                        <Text text="{tableModel1>ComplianceRisk}" />
+                        <Text text="{tableModel1>BoOwnerRisk}" />
+                        <Text text="{tableModel1>CountryKey}" />
+                        <Text text="{tableModel1>CountryDescr}" />
+                        <Text text="{tableModel1>CustomerSubtype}" />
+                        <Button
+                            text="Submit"
+                            press=".onAmlRiskCalculation"
+                            visible="false"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <!-- Simple Form: Company & Relationship -->
+        <VBox>
+            <f:SimpleForm
+                id="companyidrel"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                title="New Company/Relationship"
+                labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+                emptySpanXL="5" emptySpanL="5" emptySpanM="5" emptySpanS="5"
+                columnsXL="1" columnsL="1" columnsM="1"
+                singleContainerFullSize="false"
+            >
+                <f:content>
+                    <Label text="{i18n>New_Company_ID}" required="true" />
+                    <ComboBox id="compid" selectedKey="{company>/compid}" items="{company>/}">
+                        <items>
+                            <core:Item text="{company>desc}" key="{company>compid}" />
+                        </items>
+                    </ComboBox> 
+                    <Label text="{i18n>Relation_type}" required="true" />
+                    <ComboBox id="relationid" selectedKey="{relation>/Reltype}" items="{relation>/}">
+                        <items>
+                            <core:Item text="{relation>Reldesc}" key="{relation>Reltype}" />
+                        </items>
+                    </ComboBox>
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+
+        <!-- Action Buttons -->
+        <Button
+            text="Update Business Partner Data"
+            press=".onMDGUpdate"
+            visible="false"
+        />
+
+        <Button
+            text="Update Risk to Database"
+            press=".onUpdateRiskSQL"
+            visible="false"
+        />
+
+        <!-- Footer Toolbar -->
+        <footer>
+            <OverflowToolbar id="Footer">
+                <ToolbarSpacer />
+                <Button
+                    id="confirmid"
+                    type="Accept"
+                    width="100px"
+                    press=".OnCalculate"
+                    text="Calculate"
+                />
+                <Button
+                    id="cancleid"
+                    type="Reject"
+                    width="100px"
+                    press=".oncancel"
+                    text="{i18n>Cancel}"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>
