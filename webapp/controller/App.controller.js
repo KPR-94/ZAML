@@ -5,6 +5,7 @@ sap.ui.define([
 
   return BaseController.extend("zaml.controller.App", {
      onInit() {
+      // var flight="";
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 		}
   });
