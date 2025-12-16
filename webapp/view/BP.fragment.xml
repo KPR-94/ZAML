@@ -5,7 +5,7 @@
 >
     <Dialog
         id="bpdialog"
-        title="BP Details"
+        title="{i18n>BP_Details}"
         resizable="true"
         draggable="true"
         stretch="false"

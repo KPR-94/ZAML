@@ -1388,7 +1388,7 @@ sap.ui.define([
 						// WHERE "TableName" = '${tablename}';`;
 						querystep1 = `INSERT INTO "AMLChangeLog" (
 									[TableName], [FName], [FValue],[date] ) VALUES (
-							       '${tablename}', 'Industry_code','${oSelectedRowData.Industry_code}',
+							       '${tablename}','${oSelectedRowData.Industry_description}','${oSelectedRowData.Industry_code}',
 												'${globaldate}'
 											);`;
 
@@ -1462,7 +1462,7 @@ sap.ui.define([
 						// WHERE "TableName" = '${tablename}';`;
 						querystep1 = `INSERT INTO "AMLChangeLog" (
 									[TableName], [FName], [FValue],[date] ) VALUES (
-							       '${tablename}', 'Customer_subtype','${oSelectedRowData.Customer_subtype}',
+							       '${tablename}', '${oSelectedRowData.Description}','${oSelectedRowData.Customer_subtype}',
 												'${globaldate}'
 											);`;
 						// Customer Type History
@@ -1530,7 +1530,7 @@ sap.ui.define([
 						// WHERE "TableName" = '${tablename}';`;
 						querystep1 = `INSERT INTO "AMLChangeLog" (
 									[TableName], [FName], [FValue],[date] ) VALUES (
-							       '${tablename}', 'Country_code','${oSelectedRowData.Country_code}',
+							       '${tablename}', '${oSelectedRowData.Country_description}','${oSelectedRowData.Country_code}',
 												'${globaldate}'
 											);`;
 						// Country Code History

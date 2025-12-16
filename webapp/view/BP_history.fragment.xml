@@ -1,0 +1,100 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:ui="sap.ui.table"
+>
+  
+
+
+    <Dialog
+    id="bphistoryID"
+    title="{i18n>BP_History}"
+    draggable="true"
+    resizable="true"
+    stretch="false"
+    contentWidth="55rem"
+    contentHeight="auto"
+    class="sapUiResponsivePadding"
+>
+    <content>
+        <Table
+            id="bpid1"
+            items="{tableModel1>/rows}"
+            growing="true"
+            growingThreshold="5"
+            width="55rem"
+            enableBusyIndicator="true"
+            class="sapUiSizeCompact sapUiResponsiveMargin"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title
+                        text="{
+                            parts: [
+                                { path: 'i18n>BP_History' },
+                                { path: 'Setdefaultmodel>/rowcount' }
+                            ],
+                            formatter: '.formatter.formatI18nCount'
+                        }"
+                    />
+                    <ToolbarSpacer />
+                </Toolbar>
+            </headerToolbar>
+
+            <columns>
+                <Column width="12rem">
+                    <Text text="{i18n>Changed_object}" />
+                </Column>
+
+                <Column width="12rem">
+                    <Text text="{i18n>Changed_value}" />
+                </Column>
+
+                <Column width="18rem">
+                    <Text text="{i18n>Description}" />
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text
+                            text="{path:'tableModel1>TableName', formatter: '.formatter.formatCleanText'}"
+                            wrapping="true"
+                        />
+                        <Text
+                            text="{path:'tableModel1>FValue', formatter: '.formatter.formatCleanText'}"
+                            wrapping="true"
+                        />
+                        <Text
+                            text="{path:'tableModel1>FName', formatter: '.formatter.formatCleanText'}"
+                            wrapping="true"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </content>
+
+     <beginButton>
+            <Button
+                type="Accept"
+                width="100px"
+                text="{i18n>Confirm}"
+                press=".OnConfirm" 
+                enabled="{= ${Setdefaultmodel>/rowcount} > 0 }"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                type="Reject"
+                width="100px"
+                text="{i18n>Cancel}"
+                press=".Onclose"
+            />
+        </endButton>
+</Dialog>
+
+</core:FragmentDefinition>

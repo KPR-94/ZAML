@@ -1,18 +1,36 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/m/MessageToast",
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/model/Filter",
 	"sap/m/MessageBox",
+	"sap/ui/model/FilterOperator",
+	"sap/ui/core/BusyIndicator",
+	"sap/ui/export/Spreadsheet",
+	"sap/ui/export/library",
+	"zaml/model/formatter",
+	"sap/ui/model/resource/ResourceModel",
+	"sap/m/MessageToast",
+	"sap/ui/thirdparty/jquery"
 
-], (Controller, MessageToast, MessageBox) => {
+], (Controller, JSONModel, Filter, MessageBox, FilterOperator, BusyIndicator, Spreadsheet, library, formatter, ResourceModel, MessageToast, jquery) => {
 	"use strict";
-
+	const now = new Date(); const globaldate = now.toISOString().split('T')[0];
 	return Controller.extend("zaml.controller.Overview", {
-		onInit: function () {
+		formatter: formatter,  // <-- Attach the formatter
+		onInit: async function () {
 			var oImage = this.byId("myImageId");
 			var sImagePath = sap.ui.require.toUrl("zaml/img/AML_image.jpg");
 			// var sImagePath = sap.ui.require.toUrl("zaml/img/CHG1.png");
 			oImage.setSrc(sImagePath);
+			var localmodel = new JSONModel();
+			this.getView().setModel(localmodel, "Setdefaultmodel");
+			if (!this.oBPhistorydialog) {
+				this.oBPhistorydialog = await this.loadFragment({
+					name: "zaml.view.BP_history"
+				});
+			}
 			this.fetchDelete();
+			
 		},
 		onShowHello() {
 			// read msg from i18n model
@@ -65,15 +83,12 @@ sap.ui.define([
 			window.globalVariable = 4;
 			oRouter.navTo("detail");
 		},
-
-
 		onOpenDialogRiskweightage: function (oEvent) {
 			const oItem = oEvent.getSource();
 			const oRouter = this.getOwnerComponent().getRouter();
 			window.globalVariable = 5;
 			oRouter.navTo("detail");
 		},
-
 
 		onOpenDialogRiskValue: function (oEvent) {
 			const oItem = oEvent.getSource();
@@ -87,8 +102,6 @@ sap.ui.define([
 			window.globalVariable = 7;
 			oRouter.navTo("detail");
 		},
-
-
 		onPressBussinessPartnerData: function (oEvent) {
 			//    this.getReadAPI();
 			const oItem = oEvent.getSource();
@@ -99,16 +112,42 @@ sap.ui.define([
 			}, true);
 		},
 
-		onPressamlrisk: function (oEvent) {
+		onPressamlrisk: async function (oEvent) { 
+			const oTable = this.byId("bpid1");
+			// Remove perviously  loaded items
+			oTable.removeAllItems();
+			//Reset the growing counter
+			oTable._iRenderedItems = 0;
+			// reset the growing table (most important) 
+			const oBinding = oTable.getBinding("items");
+			if (oBinding) {
+				oBinding.refresh(true);
+			}
+		this.fetchData();
+			// Open the dialog
+			this.oBPhistorydialog.open();
+		},
+		Onclose: function () {
+			this.oBPhistorydialog.close();
+		},
+		OnConfirm: function (oEvent) {
 			var that = this;
 			const oItem = oEvent.getSource();
 			const oRouter = this.getOwnerComponent().getRouter();
-			window.globalVariable = 9;
-			oRouter.navTo("amlrisk", {
-				objectId: 9
+			window.globalVariable = 9;	
+			MessageBox.information("Are you sure you want to perform the AML risk recalculation", {
+				actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+				onClose: function (sAction) {
+					debugger;
+					if (sAction == 'OK') {
+						that.oBPhistorydialog.close();
+						oRouter.navTo("amlrisk", {
+							objectId: 9
+						});
+					}
+				}
 			});
 		},
-
 		onCompany: function (oEvent) {
 			var that = this;
 			const oItem = oEvent.getSource();
@@ -147,6 +186,68 @@ sap.ui.define([
 				});
 			});
 		},
+		fetchData: function (Id) {
+			var tablename = "AMLChangeLog";
+			var that = this;
+			this.getAccessToken().then((token) => {
+				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				//const query = 'select * FROM Industry_Hierarchy;'; // Adjust query as needed
+				const query = `SELECT * FROM ${tablename} WHERE date = '${globaldate}'`;
+				jQuery.ajax({
+					// url: proxyUrl + apiUrl,
+					url: nodeUrl,
+					method: 'POST',
+					headers: {
+						"Content-Type": "text/plain", // Use "application/json" if CPI expects JSON
+						"Authorization": `Bearer ${token}`,
+						"X-Requested-With": "XMLHttpRequest" // Capitalized properly
+						// Do not add Access-Control-Allow-* headers here — browser will ignore them
+					},
+					data: query,
+					success: (response) => {
+						BusyIndicator.hide();
+						// Handle success response here
+						// new code 
+						let xmlString = response; // assuming response is the raw XML string
+						let parser = new DOMParser();
+						let xmlDoc = parser.parseFromString(xmlString, "application/xml");
+						// Optional: check for parsing error
+						if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+							console.error("Invalid XML response");
+							return;
+						}
+
+						let jsonData = that.xmlToJson(xmlDoc.documentElement); // pass the <ROOT> node
+
+						// Extract "row" data
+                              let rowData = jsonData.select_response.row // jsonData.ROOT.select_response.row;
+						// Ensure rowData is always an array
+						if (!Array.isArray(rowData)) {
+							rowData = [rowData];
+						}
+						if (rowData[0] !== undefined) {
+							// Create JSON Model
+							let oModel = new sap.ui.model.json.JSONModel();
+							oModel.setData({ rows: rowData });
+
+							// Set Model to View
+							that.getView().setModel(oModel, "tableModel1");
+							that.getView().getModel("Setdefaultmodel").setProperty("/rowcount", rowData.length);
+							
+						}
+
+					},
+					error: (error) => {
+						BusyIndicator.hide();
+						MessageBox.error("Failed to fetch data from the server.");
+					}
+				});
+			}).catch((error) => {
+				MessageBox.error("Failed to obtain access token.");
+			});
+		},
+
 		fetchDelete: function (tablename) {
 			var tablename = tablename;
 			var that = this;
@@ -187,103 +288,98 @@ sap.ui.define([
 				MessageBox.error("Failed to obtain access token.");
 			});
 		},
-		fetchData: function () {
-			var that = this;
-			this.getAccessToken().then((token) => {
-				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-				const apiUrl = "https://chg-meridian-dev-qa-5gwjbubw.it-cpi023-rt.cfapps.eu20-001.hana.ondemand.com/http/amlsend";
-				// const query = 'select * FROM test_table;'; // Adjust query as needed
-				const query = ''; // Adjust query as needed
+		// fetchData: function () {
+		// 	var that = this;
+		// 	this.getAccessToken().then((token) => {
+		// 		const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+		// 		const apiUrl = "https://chg-meridian-dev-qa-5gwjbubw.it-cpi023-rt.cfapps.eu20-001.hana.ondemand.com/http/amlsend";
+		// 		// const query = 'select * FROM test_table;'; // Adjust query as needed
+		// 		const query = ''; // Adjust query as needed
 
-				jQuery.ajax({
-					url: proxyUrl + apiUrl,
+		// 		jQuery.ajax({
+		// 			url: proxyUrl + apiUrl,
 
-					method: 'POST',
-					headers: {
-						"Content-Type": "text/plain",
-						"Authorization": `Bearer ${token}`,
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-						"Access-Control-Allow-Headers": "Content-Type, Authorization"
-					},
-					data: query,
+		// 			method: 'POST',
+		// 			headers: {
+		// 				"Content-Type": "text/plain",
+		// 				"Authorization": `Bearer ${token}`,
+		// 				"Access-Control-Allow-Origin": "*",
+		// 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+		// 				"Access-Control-Allow-Headers": "Content-Type, Authorization"
+		// 			},
+		// 			data: query,
 
-					success: (response) => {
-						console.log("Response:", response);
-						// Handle success response here
-						var xmlString = response;
-						let parser = new DOMParser();
-						let xml = parser.parseFromString(xmlString, "text/xml");
+		// 			success: (response) => {
+		// 				console.log("Response:", response);
+		// 				// Handle success response here
+		// 				var xmlString = response;
+		// 				let parser = new DOMParser();
+		// 				let xml = parser.parseFromString(xmlString, "text/xml");
 
-						// Convert XML to JSON
-						// let jsonData = that.xmlToJson(xml.documentElement);
-
-
+		// 				// Convert XML to JSON
+		// 				// let jsonData = that.xmlToJson(xml.documentElement);
 
 
 
 
 
-						let jsonData = that.xmlToJson(xmlString);
-
-						// Extract "row" data
-						let rowData = jsonData["_-chg0_-bpfmReadBpDetailsResponse"].EtData.item; // jsonData.ROOT.select_response.row;
 
 
-						// Ensure rowData is always an array
-						rowData = Array.isArray(rowData) ? rowData : (rowData ? [rowData] : []);
+		// 				let jsonData = that.xmlToJson(xmlString);
 
-						// Process the data safely
-						let processedData = rowData.map(obj => ({
-							BpNumber: obj.BpNumber?.["#text"] || "",  // Handle undefined cases
-							BpName: obj.BpName?.["#text"] || "",
-							ComplianceRisk: obj.ComplianceRisk?.["#text"] || "",
-							BoOwnerRisk: obj.BoOwnerRisk?.["#text"] || "",
-							CountryKey: obj.CountryData?.CountryKey?.["#text"] || "",
-							CountryDescr: obj.CountryData?.CountryDescr?.["#text"] || "",
-							CustomerSubtype: obj.CustomerSubtype?.DESCRIPTION?.["#text"] || ""
-						}));
-
-						// Create and set the JSON model
-						let oModel = new sap.ui.model.json.JSONModel({ items: processedData });
-						that.getView().setModel(oModel, "tableModel");
+		// 				// Extract "row" data
+		// 				let rowData = jsonData["_-chg0_-bpfmReadBpDetailsResponse"].EtData.item; // jsonData.ROOT.select_response.row;
 
 
+		// 				// Ensure rowData is always an array
+		// 				rowData = Array.isArray(rowData) ? rowData : (rowData ? [rowData] : []);
 
-						that.oOriginalData = JSON.parse(JSON.stringify(that.getView().getModel("tableModel").getData())); // Deep copy original data
+		// 				// Process the data safely
+		// 				let processedData = rowData.map(obj => ({
+		// 					BpNumber: obj.BpNumber?.["#text"] || "",  // Handle undefined cases
+		// 					BpName: obj.BpName?.["#text"] || "",
+		// 					ComplianceRisk: obj.ComplianceRisk?.["#text"] || "",
+		// 					BoOwnerRisk: obj.BoOwnerRisk?.["#text"] || "",
+		// 					CountryKey: obj.CountryData?.CountryKey?.["#text"] || "",
+		// 					CountryDescr: obj.CountryData?.CountryDescr?.["#text"] || "",
+		// 					CustomerSubtype: obj.CustomerSubtype?.DESCRIPTION?.["#text"] || ""
+		// 				}));
 
-						//that.getJson(Response);
-					},
-					error: (error) => {
-						MessageBox.error("Failed to fetch data from the server.");
-					}
-				});
-			}).catch((error) => {
-				console.error('Error fetching token:', error);
-				MessageBox.error("Failed to obtain access token.");
-			});
-		},
+		// 				// Create and set the JSON model
+		// 				let oModel = new sap.ui.model.json.JSONModel({ items: processedData });
+		// 				that.getView().setModel(oModel, "tableModel");
 
-		xmlToJson: function (xml) {
 
+
+		// 				that.oOriginalData = JSON.parse(JSON.stringify(that.getView().getModel("tableModel").getData())); // Deep copy original data
+
+		// 				//that.getJson(Response);
+		// 			},
+		// 			error: (error) => {
+		// 				MessageBox.error("Failed to fetch data from the server.");
+		// 			}
+		// 		});
+		// 	}).catch((error) => {
+		// 		console.error('Error fetching token:', error);
+		// 		MessageBox.error("Failed to obtain access token.");
+		// 	});
+		// },
+
+		xmlToJson: function (Response) {
+			var xml = Response;
 			let obj = {};
 
 			if (xml.nodeType === 1) { // Element node
-				if (xml.attributes.length > 0) {
-					obj["@attributes"] = {};
-					for (let i = 0; i < xml.attributes.length; i++) {
-						let attr = xml.attributes.item(i);
-						obj["@attributes"][attr.nodeName] = attr.nodeValue;
-					}
+				if (xml.childNodes.length === 1 && xml.firstChild.nodeType === 3) {
+					return xml.firstChild.nodeValue.trim(); // Directly return value
 				}
-			} else if (xml.nodeType === 3) { // Text node
-				return xml.nodeValue.trim();
 			}
 
 			if (xml.hasChildNodes()) {
 				for (let i = 0; i < xml.childNodes.length; i++) {
 					let item = xml.childNodes.item(i);
-					let nodeName = item.nodeName.replace(/^.*:/, ""); // Remove namespace prefix
+					let nodeName = item.nodeName;
+
 					let content = this.xmlToJson(item);
 
 					if (typeof obj[nodeName] === "undefined") {
@@ -297,13 +393,50 @@ sap.ui.define([
 				}
 			}
 			return obj;
+
 		},
+
+		// xmlToJson: function (xml) {
+
+		// 	let obj = {};
+
+		// 	if (xml.nodeType === 1) { // Element node
+		// 		if (xml.attributes.length > 0) {
+		// 			obj["@attributes"] = {};
+		// 			for (let i = 0; i < xml.attributes.length; i++) {
+		// 				let attr = xml.attributes.item(i);
+		// 				obj["@attributes"][attr.nodeName] = attr.nodeValue;
+		// 			}
+		// 		}
+		// 	} else if (xml.nodeType === 3) { // Text node
+		// 		return xml.nodeValue.trim();
+		// 	}
+
+		// 	if (xml.hasChildNodes()) {
+		// 		for (let i = 0; i < xml.childNodes.length; i++) {
+		// 			let item = xml.childNodes.item(i);
+		// 			let nodeName = item.nodeName.replace(/^.*:/, ""); // Remove namespace prefix
+		// 			let content = this.xmlToJson(item);
+
+		// 			if (typeof obj[nodeName] === "undefined") {
+		// 				obj[nodeName] = content;
+		// 			} else {
+		// 				if (!Array.isArray(obj[nodeName])) {
+		// 					obj[nodeName] = [obj[nodeName]];
+		// 				}
+		// 				obj[nodeName].push(content);
+		// 			}
+		// 		}
+		// 	}
+		// 	return obj;
+		// },
 
 
 
 		getReadAPI: function () {
 			this.fetchData();
 		},
+
 		//*************************************************************************************************** */
 
 		jsontoXML: function (json) {

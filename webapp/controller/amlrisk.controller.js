@@ -32,7 +32,7 @@ sap.ui.define([
 		},
 
 
-		onObjectMatched(oEvent) {
+		async onObjectMatched(oEvent) {
 			amlcount = 0;
 			var oArguments = oEvent.getParameter("arguments");
 			this._sObjectId = parseInt(oArguments.objectId);
@@ -42,8 +42,8 @@ sap.ui.define([
 				this.byId("p3_Country_3242").setVisible(true);
 				this.byId("compid").setSelectedKey("");
 				this.byId("relationid").setSelectedKey("");
-				this.byId("Footer").setVisible(false);
 				this.fetchAMLChangelog();
+
 			} else {
 				this.byId("p3_Country_3242").setVisible(false);
 				this.byId("companyidrel").setVisible(true);
@@ -53,6 +53,10 @@ sap.ui.define([
 				this.relationship();
 				this.company();
 			}
+		},
+		Onclose: function(){ 
+		  this.oBPhistorydialog.close();
+
 		},
 		relationship: function () {
 			const oModel = new JSONModel();
