@@ -30,7 +30,7 @@ sap.ui.define([
 				});
 			}
 			this.fetchDelete();
-			
+
 		},
 		onShowHello() {
 			// read msg from i18n model
@@ -112,7 +112,7 @@ sap.ui.define([
 			}, true);
 		},
 
-		onPressamlrisk: async function (oEvent) { 
+		onPressamlrisk: async function (oEvent) {
 			const oTable = this.byId("bpid1");
 			// Remove perviously  loaded items
 			oTable.removeAllItems();
@@ -123,7 +123,7 @@ sap.ui.define([
 			if (oBinding) {
 				oBinding.refresh(true);
 			}
-		this.fetchData();
+			this.fetchData();
 			// Open the dialog
 			this.oBPhistorydialog.open();
 		},
@@ -134,7 +134,7 @@ sap.ui.define([
 			var that = this;
 			const oItem = oEvent.getSource();
 			const oRouter = this.getOwnerComponent().getRouter();
-			window.globalVariable = 9;	
+			window.globalVariable = 9;
 			MessageBox.information("Are you sure you want to perform the AML risk recalculation", {
 				actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
 				onClose: function (sAction) {
@@ -189,8 +189,23 @@ sap.ui.define([
 		fetchData: function (Id) {
 			var tablename = "AMLChangeLog";
 			var that = this;
+
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
 			this.getAccessToken().then((token) => {
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
 
 				//const query = 'select * FROM Industry_Hierarchy;'; // Adjust query as needed
 				const query = `SELECT * FROM ${tablename} WHERE date = '${globaldate}'`;
@@ -221,7 +236,7 @@ sap.ui.define([
 						let jsonData = that.xmlToJson(xmlDoc.documentElement); // pass the <ROOT> node
 
 						// Extract "row" data
-                              let rowData = jsonData.select_response.row // jsonData.ROOT.select_response.row;
+						let rowData = jsonData.select_response.row // jsonData.ROOT.select_response.row;
 						// Ensure rowData is always an array
 						if (!Array.isArray(rowData)) {
 							rowData = [rowData];
@@ -234,7 +249,7 @@ sap.ui.define([
 							// Set Model to View
 							that.getView().setModel(oModel, "tableModel1");
 							that.getView().getModel("Setdefaultmodel").setProperty("/rowcount", rowData.length);
-							
+
 						}
 
 					},
@@ -256,10 +271,29 @@ sap.ui.define([
 			DELETE FROM [AMLChangeLog]
 			WHERE [date] = CAST(GETDATE() - 1 AS DATE);
 			`;
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
+
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
 
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
+
+
 
 				//const query = 'select * FROM Industry_Hierarchy;'; // Adjust query as needed
 				const query = dquery; // `SELECT * FROM ${tablename}`;

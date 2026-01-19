@@ -1,5 +1,5 @@
 {
-    "xsappname": "amlapp-xsuaa",
+    "xsappname": "zaml-xsuaa",
     "tenant-mode": "dedicated",
     "scopes": [
       {

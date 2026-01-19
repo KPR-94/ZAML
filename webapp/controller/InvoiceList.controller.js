@@ -68,10 +68,28 @@ sap.ui.define([
             var sId = parseInt(Id);
             var tablename = "Bussiness_Partner_Data";
             var that = this;
+            let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
             this.getAccessToken().then((token) => {
                 const proxyUrl = "https://cors-anywhere.herokuapp.com/";
                 const apiUrl = "https://chg-meridian-dev-qa-5gwjbubw.it-cpi023-rt.cfapps.eu20-001.hana.ondemand.com/http/dbconnect";
-                const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+                // const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+                if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
+
 
                 //const query = 'select * FROM Industry_Hierarchy;'; // Adjust query as needed
                 const query = `SELECT * FROM ${tablename}`;

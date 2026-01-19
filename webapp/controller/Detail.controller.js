@@ -19,11 +19,17 @@ sap.ui.define([
 	return Controller.extend("zaml.controller.Detail", {
 		formatter: formatter,  // <-- Attach the formatter
 		onInit() {
+			// Pramod
 			const oRouter = this.getOwnerComponent().getRouter();
 			oRouter.getRoute("detail").attachPatternMatched(this.onObjectMatched, this);
 			//new code 
 			this.oOriginalData = [];
 			this.finalsqlQuery = 0;
+			// let oModel = new sap.ui.model.json.JSONModel();
+			// let oModel = new sap.ui.model.json.JSONModel();
+			// oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			// let systemid = oModel.getProperty("/system");
+			// let client = oModel.getProperty("/client");
 		},
 
 		onObjectMatched(oEvent) {
@@ -240,8 +246,13 @@ sap.ui.define([
 		getAccessToken: function () {
 
 			const tokenUrl = 'https://chg-meridian-dev-qa-5gwjbubw.authentication.eu20.hana.ondemand.com/oauth/token';
-			const clientId = 'sb-1b807827-5cef-4be7-a28f-a5cd04937a57!b64479|it-rt-chg-meridian-dev-qa-5gwjbubw!b18631';
-			const clientSecret = '589a2f4c-bf3c-4481-8402-92b0943a09ba$_e-GrL4Ve9hLn1637qzrLuptGCz-XwjwOR4vKdzHTHA=';
+			// const clientId = 'sb-1b807827-5cef-4be7-a28f-a5cd04937a57!b64479|it-rt-chg-meridian-dev-qa-5gwjbubw!b18631';
+			// const clientSecret = '589a2f4c-bf3c-4481-8402-92b0943a09ba$_e-GrL4Ve9hLn1637qzrLuptGCz-XwjwOR4vKdzHTHA=';
+
+
+			// const TOKEN_URL = 'https://chg-meridian-dev-qa-5gwjbubw.authentication.eu20.hana.ondemand.com/oauth/token';
+			const clientId = 'sb-ec1b7c71-fc1a-4482-80ed-11d22a81be2f!b64479|it-rt-chg-meridian-dev-qa-5gwjbubw!b18631'
+			const clientSecret = '1e90e551-c183-42d2-844c-9a85010019a3$vUY618ctdWUYiED_MUmJeZr5zN1ZBoeXg-l4AQ4voYQ=';
 
 			return new Promise((resolve, reject) => {
 				jQuery.ajax({
@@ -271,17 +282,31 @@ sap.ui.define([
 			var that = this;
 			let dquery;
 			dquery = `SELECT * FROM ${tablename}`;
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
+
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
 
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
 
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
 				//const query = 'select * FROM Industry_Hierarchy;'; // Adjust query as needed
 				const query = dquery; // `SELECT * FROM ${tablename}`;
 				jQuery.ajax({
-					// url: proxyUrl + apiUrl,
+					// url: apiUrl,
 					url: nodeUrl,//apiUrl,
-
 					method: 'POST',
 					headers: {
 						"Content-Type": "text/plain", // Use "application/json" if CPI expects JSON
@@ -290,7 +315,6 @@ sap.ui.define([
 						// Do not add Access-Control-Allow-* headers here — browser will ignore them
 					},
 					data: query,
-
 					success: (response) => {
 						that.byId("p3_Industry").setBusy(false);
 						that.byId("p3_Customer_subtype").setBusy(false);
@@ -905,9 +929,28 @@ sap.ui.define([
 			var that = this;
 			let dquery;
 			dquery = `SELECT * FROM ${tablename}`;
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
+
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
+
 				const query = dquery; // `SELECT * FROM ${tablename}`;
 				jQuery.ajax({
 					// url: proxyUrl + apiUrl,
@@ -1754,10 +1797,29 @@ sap.ui.define([
 		updateData: function (query) {
 			var that = this;
 			var updateQuery = query;
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
+
+
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 				const apiUrl = "https://chg-meridian-dev-qa-5gwjbubw.it-cpi023-rt.cfapps.eu20-001.hana.ondemand.com/http/dbconnect";
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
 				const query = updateQuery; // Adjust query as needed
 				jQuery.ajax({
 					//  url: proxyUrl + apiUrl,
@@ -1979,11 +2041,30 @@ sap.ui.define([
 		deleteData: function (query, tablename) {
 			var that = this;
 			var updateQuery = query;
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
+
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 				const apiUrl = "https://chg-meridian-dev-qa-5gwjbubw.it-cpi023-rt.cfapps.eu20-001.hana.ondemand.com/http/dbconnect";
 				const query = updateQuery; // Adjust query as needed
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
+ 
 				jQuery.ajax({
 					// url: proxyUrl + apiUrl,
 					// url: apiUrl,
@@ -2681,11 +2762,30 @@ sap.ui.define([
 		createData: function (query) {
 			var that = this;
 			var updateQuery = query;
+			let oModel = new sap.ui.model.json.JSONModel();
+			oModel.loadData("/sap/bc/ui2/start_up?", "", false);
+			let systemid = oModel.getProperty("/system");
+			let client = oModel.getProperty("/client");
+			let nodeUrl;
+
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 				const apiUrl = "https://chg-meridian-dev-qa-5gwjbubw.it-cpi023-rt.cfapps.eu20-001.hana.ondemand.com/http/dbconnect";
 				const query = updateQuery; // Adjust query as needed
-				const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				if (systemid === "SD1") {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SQ1" || systemid === "SQ2") {
+					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else if (systemid === "SP1") {
+					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+
+				} else {
+					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				}
+
 				jQuery.ajax({
 					// url: proxyUrl + apiUrl,
 					// url: apiUrl,
