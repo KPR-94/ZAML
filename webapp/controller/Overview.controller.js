@@ -280,18 +280,18 @@ sap.ui.define([
 			this.getAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 				// const nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
-				if (systemid === "SD1") {
-					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// if (systemid === "SD1") {
+				// 	nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
 
-				} else if (systemid === "SQ1" || systemid === "SQ2") {
+				// } else if (systemid === "SQ1" || systemid === "SQ2") {
 					nodeUrl = "https://dbconnect-proxysq.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
 
-				} else if (systemid === "SP1") {
-					nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// } else if (systemid === "SP1") {
+				// 	nodeUrl = "https://dbconnect-proxysp.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
 
-				} else {
-					nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
-				}
+				// } else {
+				// 	nodeUrl = "https://dbconnect-proxy.cfapps.eu20-001.hana.ondemand.com/api/dbconnect";
+				// }
 
 
 

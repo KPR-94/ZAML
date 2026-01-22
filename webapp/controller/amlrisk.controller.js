@@ -974,8 +974,8 @@ sap.ui.define([
 				"BP_NUMBERS": Array.isArray(bpList) && bpList.length > 0
 					? bpList.map(bp => ({ "BP_NUMBER": bp }))
 					: [],
-				// "SID": "SD1"  // Replace with dynamic SID if needed
-				"SID": systemid
+				"SID": "SQ1"  // Replace with dynamic SID if needed
+				//"SID": "systemid"
 			};
 
 			// Only call amlupdateSQLData if there are BP_NUMBERS
@@ -1001,6 +1001,7 @@ sap.ui.define([
 			this.amlgetAccessToken().then((token) => {
 				const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 				const apiUrl = "https://aml_rest-bright-waterbuck-re.cfapps.eu20-001.hana.ondemand.com/amlrecalculate";
+				// const apiUrl = "https://aml_rest_sq-happy-roan-nw.cfapps.eu20-001.hana.ondemand.com/amlrecalculate";
 				jQuery.ajax({
 					// url: proxyUrl + apiUrl,
 					url: apiUrl,
